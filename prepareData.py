@@ -1,5 +1,3 @@
-
-cat > prepareData.py << 'EOF'
 Purpose: Loads the raw data, cleans it, and prepares train/test splits ready fro model training
 import glob
 import os
