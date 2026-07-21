@@ -12,7 +12,7 @@ def load_data():
     files = glob.glob("data/raw/*.csv")
 
     if not files:
-        raise FileNotFound("No files found")
+        raise FileNotFoundError("No files found")
 
     dataFrames = []
 
@@ -21,7 +21,7 @@ def load_data():
         dataFrame = pd.read_csv(file, low_memory=False)
         dataFrames.append(dataFrame)
         
-    data = pd.concat(dataframes, ignore_index=True)
+    data = pd.concat(dataFrames, ignore_index=True)
     data.columns = data.columns.str.strip()
     
     return data
@@ -36,12 +36,13 @@ def prepare_data(data):
     if "Label" not in data.columns:
         raise ValueError("No label column")
         
-    data["is_attack"] = ( data["Label"].astype(str).str.strip().str.upper() != "Benign").astype(int)
+    data["is_attack"] = ( data["Label"].astype(str).str.strip().str.upper() 
+    != "Benign").astype(int)
     
     x = data.drop(columns=["Label", "is_attack"])
     y = data["is_attack"]
     
-    x = x.apply(pd.to_numeric, errors="coerce"
+    x = x.apply(pd.to_numeric, errors="coerce")
     x = x.dropna(axis=1, how="all")
     
     valid_rows = x.notna().all(axis=1)
@@ -78,20 +79,20 @@ def main():
     os.makedirs("Results", exist_ok=True)
     
     data = load_data()
-    print({len(data)})
+    print(f"Loaded {len(data)} Rows")
     
     data = clean_data(data)
-    print({len(data)})
+    print(f"Loaded {len(data)} Rows")
     
     processed_data = prepare_data(data)
     
-    output_file = "results/prepareData_data.joblib"
+    output_file = "Results/prepareData_data.joblib"
     joblib.dump(processed_data, output_file)
     
-    print(f"Training: {len(processed_data['x_train])}")
-    print(f"Testing: {len(processed_data['x_test])}")
+    print(f"Training: {len(processed_data['x_train'])}")
+    print(f"Testing: {len(processed_data['x_test'])}")
     
-if _name_ == "_main_":
+if __name__ == "__main__":
     main()
     
 
