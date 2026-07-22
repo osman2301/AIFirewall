@@ -53,6 +53,6 @@ This cleans the data and saves a ready-to-use train/test split to `results/prepa
 
 ### 4. Train and evaluate models
 ```bash
-python train_models.py
+python training.py
 ```
 This trains Random Forest and Isolation Forest and writes results to `results/model_comparison.csv`.
