@@ -36,8 +36,7 @@ def prepare_data(data):
     if "Label" not in data.columns:
         raise ValueError("No label column")
         
-    data["is_attack"] = ( data["Label"].astype(str).str.strip().str.upper() 
-    != "Benign").astype(int)
+    data["is_attack"] = (data["Label"].astype(str).str.strip().str.upper() != "Benign").astype(int)
     
     x = data.drop(columns=["Label", "is_attack"])
     y = data["is_attack"]
