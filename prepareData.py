@@ -32,7 +32,7 @@ def clean_data(data):
     
     return data
     
-def prepare_data(data):
+def prepareData(data):
     if "Label" not in data.columns:
         raise ValueError("No label found")
         
@@ -87,9 +87,9 @@ def main():
     data = clean_data(data)
     print(f"Loaded {len(data)} Rows")
     
-    processed_data = prepare_data(data)
+    processed_data = prepareData(data)
     
-    output_file = "Results/prepare_data.joblib"
+    output_file = "Results/prepareData.joblib"
     joblib.dump(processed_data, output_file)
     
     print(f"Training: {len(processed_data['x_train'])}")

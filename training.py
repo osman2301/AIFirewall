@@ -8,7 +8,7 @@ from sklearn.model_selection import cross_val_score
 import time
 
 def load_data():
-    return joblib.load("Results/prepare_data.joblib")
+    return joblib.load("Results/prepareData_data.joblib")
 
 def train_random_forest(x_train, y_train):
     model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
