@@ -3,7 +3,9 @@
 import joblib
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, IsolationForest
-from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
+from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score
+from sklearn.model_selection import cross_val_score
+import time
 
 def load_data():
     return joblib.load("Results/prepareData_data.joblib")
@@ -14,13 +16,22 @@ def train_random_forest(x_train, y_train):
     return model
     
 def test_random_forest(model, x_test, y_test):
+    
+    start_time = time.perf_counter()
+    
     predictions = model.predict(x_test)
+    
+    total_time = time.perf_counter() - start_time
+    latency = (total_time * 1000) / len(x_test)
+    probabilities = model.predict_proba(x_test)[:, 1]
     
     precision = precision_score(y_test, predictions, zero_division=0)
     
     recall = recall_score(y_test, predictions, zero_division=0)
     
     f1 = f1_score(y_test, predictions, zero_division=0)
+    
+    roc_auc = roc_auc_score( y_test, probabilities)
     
     true_negative, false_positive, false_negative, true_positive = confusion_matrix(y_test, predictions).ravel()
     
@@ -29,11 +40,23 @@ def test_random_forest(model, x_test, y_test):
     "Precision": precision,
     "Recall": recall,
     "f1_score": f1,
+    "roc_auc": roc_auc,
+    "latency": latency,
     "true_positive": true_positive,
     "false_positive": false_positive,
     "false_negative": false_negative,
     "true_negative": true_negative,
     }
+    
+def per_class_detecion_rate(predictions, attack_types):
+    results = pd.DataFrame({"attack_type": attack_types.values, "predicted": predictions})
+    
+    counts = results.groupby("attack_type").size()
+    rates = results.groupby("attack_type")["predicted'].mean()
+    
+    completion = pd.dataFrame({"count": counts, "detection_rate": rates})
+    
+    return completion.reset_index()
     
 def train_isolation_forest(x_train):
     model = IsolationForest(contamination=0.15, random_state=42, n_jobs=-1)
@@ -75,6 +98,21 @@ def main():
     random_forest = train_random_forest(x_train, y_train)
     random_forest_results = test_random_forest(random_forest, x_test, y_test)
     print("Random Forest Results: ", round(random_forest_results["f1_score"], 4))
+    
+    #adding cross-validation
+    average_f1 = cross_val_score(random_forest, x_train, y_train, cv=5, scoring="f1").mean()
+    forest_results["Average_f1"] = average_f1
+    print("Average F1 Score: ", average_f1)
+    
+    # per-class detection rate
+    attack_types = data["attack_type_test"]
+    predictions = random_forest.predict(x_test)
+    
+    breakdown = per_class_detection_rate(predictions, attack_types)
+    breakdown.to_csv("Results/per_class_detection.csv", index=False)
+    
+    print("\nDetection results: ")
+    print(breakdown)
     
     print("Training Isolation Forest")
     isolation_forest = train_isolation_forest(x_train)

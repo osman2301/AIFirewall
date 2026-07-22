@@ -34,9 +34,10 @@ def clean_data(data):
     
 def prepare_data(data):
     if "Label" not in data.columns:
-        raise ValueError("No label column")
+        raise ValueError("No label found")
         
-    data["is_attack"] = (data["Label"].astype(str).str.strip().str.upper() != "Benign").astype(int)
+    attack_types = (data["Label"].astype(str).str.strip()
+    data["is_attack"] = (attack_types.str.upper() != "BENIGN").astype(int)
     
     x = data.drop(columns=["Label", "is_attack"])
     y = data["is_attack"]
@@ -47,6 +48,7 @@ def prepare_data(data):
     valid_rows = x.notna().all(axis=1)
     x = x.loc[valid_rows]
     y = y.loc[valid_rows]
+    attack_types = attack_types.loc[valid_rows]
     
     x_train, x_test, y_train, y_test = train_test_split (
         x,
