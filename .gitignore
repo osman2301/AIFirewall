@@ -1,4 +1,4 @@
 data/raw/*.csv
 venv/
-Results/
+Results/*.joblib
 __pycache__/
