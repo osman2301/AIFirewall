@@ -7,7 +7,7 @@ import pandas as pd
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-
+ 
 def load_data():
     files = glob.glob("data/raw/*.csv")
 
