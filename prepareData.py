@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
-from sklearn.prepareData import StandardScaler
+from sklearn.preprocessing import StandardScaler
 
 def load_data():
     files = glob.glob("data/raw/*.csv")
@@ -36,8 +36,7 @@ def prepare_data(data):
     if "Label" not in data.columns:
         raise ValueError("No label column")
         
-    data["is_attack"] = ( data["Label"].astype(str).str.strip().str.upper() 
-    != "Benign").astype(int)
+    data["is_attack"] = (data["Label"].astype(str).str.strip().str.upper() != "Benign").astype(int)
     
     x = data.drop(columns=["Label", "is_attack"])
     y = data["is_attack"]

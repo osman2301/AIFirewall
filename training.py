@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier, IsolationForest
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 
 def load_data():
-    return joblib.load("Results/preparedData.joblib")
+    return joblib.load("Results/preparedData_data.joblib")
 
 def train_random_forest(x_train, y_train):
     model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
