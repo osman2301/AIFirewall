@@ -101,7 +101,7 @@ def main():
     
     #adding cross-validation
     average_f1 = cross_val_score(random_forest, x_train, y_train, cv=5, scoring="f1").mean()
-    forest_results["Average_f1"] = average_f1
+    random_forest_results["Average_f1"] = average_f1
     print("Average F1 Score: ", average_f1)
     
     # per-class detection rate
