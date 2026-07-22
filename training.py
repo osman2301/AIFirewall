@@ -48,13 +48,13 @@ def test_random_forest(model, x_test, y_test):
     "true_negative": true_negative,
     }
     
-def per_class_detecion_rate(predictions, attack_types):
+def per_class_detection_rate(predictions, attack_types):
     results = pd.DataFrame({"attack_type": attack_types.values, "predicted": predictions})
     
     counts = results.groupby("attack_type").size()
-    rates = results.groupby("attack_type")["predicted'].mean()
+    rates = results.groupby("attack_type")["predicted"].mean()
     
-    completion = pd.dataFrame({"count": counts, "detection_rate": rates})
+    completion = pd.DataFrame({"count": counts, "detection_rate": rates})
     
     return completion.reset_index()
     
