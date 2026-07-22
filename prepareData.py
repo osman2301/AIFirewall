@@ -89,7 +89,7 @@ def main():
     
     processed_data = prepare_data(data)
     
-    output_file = "Results/prepareData_data.joblib"
+    output_file = "Results/prepare_data.joblib"
     joblib.dump(processed_data, output_file)
     
     print(f"Training: {len(processed_data['x_train'])}")
