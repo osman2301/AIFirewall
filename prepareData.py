@@ -15,7 +15,7 @@ def load_data():
         raise FileNotFoundError("No files found")
 
     dataFrames = []
-
+ 
     for file in files: 
         print(f"Reading {file}")
         dataFrame = pd.read_csv(file, low_memory=False)
