@@ -36,7 +36,7 @@ def prepare_data(data):
     if "Label" not in data.columns:
         raise ValueError("No label found")
         
-    attack_types = (data["Label"].astype(str).str.strip()
+    attack_types = data["Label"].astype(str).str.strip()
     data["is_attack"] = (attack_types.str.upper() != "BENIGN").astype(int)
     
     x = data.drop(columns=["Label", "is_attack"])
@@ -50,9 +50,10 @@ def prepare_data(data):
     y = y.loc[valid_rows]
     attack_types = attack_types.loc[valid_rows]
     
-    x_train, x_test, y_train, y_test = train_test_split (
+    x_train, x_test, y_train, y_test, attack_type_train, attack_type_test = train_test_split (
         x,
         y,
+        attack_types,
         test_size=0.20,
         random_state=42,
         stratify=y,
@@ -72,6 +73,7 @@ def prepare_data(data):
     "y_train": y_train,
     "x_test": x_test,
     "y_test": y_test,
+    "attack_type_test": attack_type_test,
     "Scaler": scaler,
     "Names": list(x.columns),
     }
