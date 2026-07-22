@@ -10,7 +10,7 @@ def load_data():
 
 def train_random_forest(x_train, y_train):
     model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
-    model.fix(x_train, y_train)
+    model.fit(x_train, y_train)
     return model
     
 def test_random_forest(model, x_test, y_test):
@@ -52,7 +52,7 @@ def test_isolation_forest(model, x_test, y_test):
     
     true_negative, false_positive, false_negative, true_positive = confusion_matrix(y_test, predictions).ravel()
     
-        eturn {
+    return {
     "Model": "Isolation Forest",
     "Precision": precision,
     "Recall": recall,
@@ -93,13 +93,9 @@ def main():
         index=False,
     )
     
-    joblib.dump(
+    joblib.dump(random_forest, "Results/random_forest_model.joblib")
     
-    )
-    
-    joblib.dump(
-    
-    )
+    joblib.dump(isolation_forest, "Results/isolation_forest_model.joblib")
     
     print("\n Model Comparison: ")
     print(results)
